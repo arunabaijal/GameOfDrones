@@ -58,14 +58,15 @@ class ObjectClassifier:
                 # Inner function for thread to parallel process image classification according to trained model
                 def classifyFace():
                     print("Classifying feature")
-                    os.system("python -W ignore /home/aruna/Downloads/Final/label_image.py --graph=./output/retrained_graph.pb --labels=./output/retrained_labels.txt --input_layer=Placeholder --output_layer=final_result --image=" + filename)
+                    # os.system("python3 -W ignore /home/aruna/Downloads/Final/label_image.py --graph=/home/aruna/Downloads/Final/output/retrained_graph.pb --labels=/home/aruna/Downloads/Final/output/retrained_labels.txt --input_layer=Placeholder --output_layer=final_result --image=" + filename)
 
-                    # prediction = classify(filename, "./output/retrained_graph.pb", "./output/retrained_labels.txt", shape=720)
-                    # nonlocal text
-                    # text = prediction[0][0]
+                    prediction = classify(filename, "/home/aruna/Downloads/Final/output/retrained_graph.pb", "/home/aruna/Downloads/Final/output/retrained_labels.txt", shape=299)
+                    nonlocal text
+                    text = prediction[0][0]
                     print("Finished classifying with text: " + text)
 
                 # Standard text that is displayed above recognized face
+                print("XXXXXXXXXXXXXXXXXXXXX")
                 text = "unidentified object"
                 exceptional_frames = 100
                 startpoint = (0, 0)
@@ -91,7 +92,8 @@ class ObjectClassifier:
                     endpoint = (x + w, y + h)
                     object1 = (img[y:y + h, x:x + w])
                     cv2.imwrite(filename, object1)
-                    threading._start_new_thread(classifyFace, ())
+                    classifyFace()
+                    # threading._start_new_thread(classifyFace, ())
                     # Draw face rectangle and text on image frame
                     cv2.rectangle(img, startpoint, endpoint, color, 2)
                     textpos = (startpoint[0], startpoint[1] - 7)
